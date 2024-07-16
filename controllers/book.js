@@ -149,14 +149,32 @@ export const paymentVerification = async (req, res, next) => {
   console.log(generatedSignature, signature);
 
   if (generatedSignature === signature) {
-    const payment = await paymentModel.create({
-      user: req.user,
-      place: place_id,
-      booking: booking_id,
-      razorpay_order_id: orderId,
-      razorpay_payment_id: paymentId,
-      razorpay_signature: signature,
-    });
+    const booked = await paymentModel.find({ booking: booking_id });
+
+    if (!booked) {
+      const payment = await paymentModel.create({
+        user: req.user,
+        place: place_id,
+        booking: booking_id,
+        razorpay_order_id: orderId,
+        razorpay_payment_id: paymentId,
+        razorpay_signature: signature,
+      });
+    }
+
+    const booking = await bookingModel.findOneAndUpdate(
+      { _id: booking_id },
+      { booked: true },
+      { new: true }
+    );
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found or already booked",
+      });
+    }
+
     return res.status(201).json({
       success: true,
       message: "Payment Verification successful",

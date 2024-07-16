@@ -22,6 +22,12 @@ const bookingSchema = new mongoose.Schema({
   price: Number,
 
   email: { type: String, required: true },
+
+  booked: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 });
 
 const paymentSchema = new mongoose.Schema({
