@@ -6,7 +6,6 @@ import {
   getallPlaces,
   gotPlaces,
   updatePlace,
-  deletePlace,
 } from "../controllers/place.js";
 
 const router = express.Router();
@@ -23,7 +22,5 @@ router
   .put(isAuthenticated, updatePlace);
 
 router.get("/allplaces", getallPlaces);
-
-router.delete("/deleteplace/:id", isAuthenticated, deletePlace);
 
 export default router;

@@ -143,26 +143,3 @@ export const getallPlaces = async (req, res, next) => {
     next(error);
   }
 };
-
-export const deletePlace = async (req, res, next) => {
-  const { id } = req.params;
-
-  // console.log(id);
-  try {
-    const deletedBooking = await PlaceModel.findByIdAndDelete(id);
-
-    if (!deletedBooking) {
-      return res.status(404).json({
-        success: false,
-        message: "Place not found",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      message: "Place deleted successfully",
-    });
-  } catch (error) {
-    next(error);
-  }
-};
